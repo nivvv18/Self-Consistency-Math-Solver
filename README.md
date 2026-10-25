@@ -1,106 +1,74 @@
-# Self-Consistency Math Solver
+# Self-Consistency Math Solver (GenAI Mini Project)
 
-## Project Overview
-The Self-Consistency Math Solver is a Generative AI project designed to solve multi-step mathematical word problems using Large Language Models (LLMs). It generates multiple independent reasoning attempts, normalizes their final answers, and applies majority voting to select the most consistent answer.
+## Project 16 — Generative AI with Large Language Models
 
-## Features
-- Solves mathematical word problems using Chain-of-Thought prompting.
-- Generates multiple reasoning attempts.
-- Uses answer normalization to handle different numerical formats and units.
-- Applies majority voting to determine the final answer.
-- Displays agreement metrics and individual attempts.
-- Provides an interactive web interface using Streamlit.
-- Supports offline demonstration mode and live API mode.
+### Problem statement
+Solve mathematical word problems using multiple independent LLM attempts and select the most consistent final answer using self-consistency prompting.
 
-## Technology Stack
-- Python
-- Generative AI and Large Language Models
-- OpenAI API
-- Streamlit
-- Regular Expressions
-- Git and GitHub
+### Features
+- Streamlit web interface
+- Adjustable number of attempts (3–9)
+- Optional OpenAI API integration
+- Normalizes common answer formats before voting
+- Displays individual attempt summaries, answer agreement, and vote distribution
+- Offline demonstration for the sample notebook problem
 
-## Project Structure
+### Requirements
+- Python 3.10+
+- Packages in `requirements.txt`
+- Optional: OpenAI API key for solving general word problems
 
-```text
-Self-Consistency-Math-Solver/
-├── app/
-│   ├── app.py
-│   ├── solver.py
-│   ├── normalizer.py
-│   └── prompts.py
-├── evaluation/
-│   └── evaluate.py
-├── requirements.txt
-├── README.md
-└── .gitignore
-```
-
-## Installation and Setup
-
-### 1. Clone the repository
-
-```bash
-git clone YOUR_REPOSITORY_URL
-cd YOUR_REPOSITORY_FOLDER
-```
-
-Replace the placeholders with your actual GitHub repository URL and folder name.
-
-### 2. Create a virtual environment
-
+### Run locally
 ```bash
 python -m venv .venv
-```
-
-Activate it on Windows:
-
-```bash
+# Windows:
 .venv\Scripts\activate
-```
+# macOS/Linux:
+source .venv/bin/activate
 
-### 3. Install dependencies
-
-```bash
 pip install -r requirements.txt
+streamlit run app.py
 ```
 
-### 4. Run the application
+Open the local URL shown in the terminal (usually http://localhost:8501).
 
+### Enable AI mode
+Set your API key as an environment variable. Do not paste keys into source code or commit them to Git.
+
+Windows PowerShell:
+```powershell
+$env:OPENAI_API_KEY="your-key"
+$env:OPENAI_MODEL="gpt-4o-mini"
+streamlit run app.py
+```
+
+macOS/Linux:
 ```bash
-streamlit run app/app.py
+export OPENAI_API_KEY="your-key"
+export OPENAI_MODEL="gpt-4o-mini"
+streamlit run app.py
 ```
 
-The application should open in your browser. If it does not, open the local URL displayed in the terminal.
+### Example problem
+A shop sells notebooks for ₹25 each. Riya buys 4 notebooks and pays with ₹200. How much change should she receive?
 
-## API Configuration
-For live language-model inference, configure the required API credentials using an environment variable named `OPENAI_API_KEY`. Keep your API key private and never commit it to GitHub.
+Expected result: ₹100.
 
-The project also describes an offline demonstration mode when API credentials are unavailable.
+### Methodology
+1. Generate multiple independent solution attempts.
+2. Extract each final answer.
+3. Normalize answer strings to reduce formatting differences.
+4. Use majority voting to select the most common answer.
+5. Report agreement as `votes for selected answer / total attempts`.
 
-## Working Principle
-1. Accept a mathematical word problem from the user.
-2. Generate multiple independent reasoning attempts.
-3. Extract the final answer from each attempt.
-4. Normalize numerical answers and remove unnecessary units or formatting.
-5. Count the occurrences of each normalized answer.
-6. Select the majority-vote answer.
-7. Display the selected answer, agreement metrics, and reasoning attempts.
+### Limitations
+- Agreement is not proof of correctness; attempts may share the same error.
+- Basic normalization handles simple numeric answers best. More advanced projects can add unit-aware parsing and symbolic verification.
+- API mode incurs provider usage costs and requires internet access.
+- Offline mode only demonstrates the included notebook example; it does not claim to solve arbitrary questions.
 
-## Evaluation
-The project report describes a benchmark comparison between greedy Chain-of-Thought decoding and self-consistency majority voting. It reports 74.20% accuracy for greedy decoding and 88.60% for self-consistency under the reported experimental setup.
-
-These figures are the results stated in the project report; they should not be treated as independently reproduced results unless the benchmark is run and verified.
-
-## Future Enhancements
-- Integrate symbolic calculation tools.
-- Implement weighted majority voting.
-- Introduce adaptive sampling to reduce computation.
-- Expand mathematical benchmark coverage.
-
-## Author
-Nivedita Sharma
-
-## License
-Add a suitable open-source license if you intend to distribute this project for reuse.
-
+### Suggested extensions
+- Add a benchmark set of 20–50 math word problems.
+- Compare single-attempt accuracy with self-consistency accuracy.
+- Add symbolic verification using SymPy.
+- Save evaluation results to CSV and plot accuracy against number of attempts.
